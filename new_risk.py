@@ -1,8 +1,10 @@
 #!/usr/bin/python
 import sys
 from random import randint
+from dothat import lcd
+from dothat import backlight
 
-#to do:  ability to specify troops as arguments
+#to do: tune pimoroni hat.  break out dice modification into its own function as well as HAT display
 
 #main place holders
 asoldiers=0; dsoldiers=0
@@ -38,6 +40,10 @@ def war():
         if (asoldiers <= 1) or (dsoldiers <= 0):
             break
         roll(atd,dtd)
+    lcd.clear(); lcd.set_contrast(50); backlight.set_graph(0.0)
+    lcd.set_cursor_position(0,0); lcd.write("War is hell...")
+    lcd.set_cursor_position(0,1); lcd.write("Offense Lost: " + str(atotallost))
+    lcd.set_cursor_position(0,2); lcd.write("Defense Lost: " + str(dtotallost))
     print '\n' + "Attacking troops lost: " + str(atotallost) + '\n' + "Defending troops lost: " + str(dtotallost) + '\n'
     sys.exit()
 
