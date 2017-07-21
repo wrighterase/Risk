@@ -9,14 +9,12 @@ from dothat import backlight
 #main place holders
 asoldiers=0; dsoldiers=0
 atotallost=0; dtotallost=0
+atd=0; dtd=0
 
-def war():
-    global asoldiers; global dsoldiers
-    #sanity checks to make sure theres no funny business
-    if len(sys.argv) != 3:
-        print "Check arguments..." + '\n' + sys.argv[0] + ' ' + "ATTACKING_TROOPS " + "DEFENDING TROOPS "; quit()
-    #these statements control how many dice can be thrown according to how many troops are available and can advance to the territory captured
-    asoldiers = int(sys.argv[1]); dsoldiers = int(sys.argv[2])
+def dice_modifier(A,D):
+    global atd; global dtd
+    #if attacking troops available is 1 then break because there are no reserves left to advance
+    #going full kamikaze isnt in the rules :)
     if (asoldiers >= 4):
         atd=3
     if (asoldiers == 3):
@@ -27,25 +25,33 @@ def war():
         dtd=2
     if (dsoldiers == 1):
         dtd=1
-        
+
+def war():
+    global asoldiers; global dsoldiers
+    #sanity checks to make sure theres no funny business
+    if len(sys.argv) != 3:
+        print "Check arguments..." + '\n' + sys.argv[0] + ' ' + "ATTACKING_TROOPS " + "DEFENDING TROOPS "; quit()
+    #these statements control how many dice can be thrown according to how many troops are available and can advance to the territory captured
+    asoldiers = int(sys.argv[1]); dsoldiers = int(sys.argv[2])
+
     while True:
-        #if attacking troops available is 1 then break because there are no reserves left to advance
-        #going full kamikaze isnt in the rules :)
-        if asoldiers == 3:
-            atd=2
-        if asoldiers == 2:
-            atd=1
-        if dsoldiers == 1:
-            dtd=1
+        dice_modifier(asoldiers,dsoldiers)
         if (asoldiers <= 1) or (dsoldiers <= 0):
             break
         roll(atd,dtd)
-    lcd.clear(); lcd.set_contrast(50); backlight.set_graph(0.0)
+    tophat()
+    print '\n' + "Attacking troops lost: " + str(atotallost) + '\n' + "Defending troops lost: " + str(dtotallost) + '\n'
+    sys.exit()
+
+def tophat():
+    lcd.clear(); lcd.set_contrast(50); backlight.set_graph(0)
+    if (asoldiers > dsoldiers) and (atotallost != 1):
+        backlight.rgb(0,255,0)
+    elif (asoldiers <= dsoldiers):
+        backlight.rgb(255,0,0)
     lcd.set_cursor_position(0,0); lcd.write("War is hell...")
     lcd.set_cursor_position(0,1); lcd.write("Offense Lost: " + str(atotallost))
     lcd.set_cursor_position(0,2); lcd.write("Defense Lost: " + str(dtotallost))
-    print '\n' + "Attacking troops lost: " + str(atotallost) + '\n' + "Defending troops lost: " + str(dtotallost) + '\n'
-    sys.exit()
 
 def roll(A,D):
     #set the list for numbers thrown and variables to "collect the dead"
@@ -81,5 +87,7 @@ def roll(A,D):
     print "Attacker lost: " + str(atroops) + " troops" + '\n' + "Defender lost: " + str(dtroops) + " troops" + '\n'
     asoldiers-=atroops; dsoldiers-=dtroops
     atotallost+=atroops; dtotallost+=dtroops
+
+
 if __name__ == "__main__":
     war()
