@@ -1,51 +1,37 @@
 #!/usr/bin/python
 import sys
 from random import randint
-from dothat import lcd
-from dothat import backlight
 
-#to do: tune pimoroni hat.  break out dice modification into its own function as well as HAT display
-
-#main place holders
-asoldiers=0; dsoldiers=0
+#to do:  ability to specify troops as arguments
+asoldiers=10; dsoldiers=8
 atotallost=0; dtotallost=0
 
 def war():
-    global asoldiers; global dsoldiers
     #sanity checks to make sure theres no funny business
-    if len(sys.argv) != 3:
-        print "Check arguments..." + '\n' + sys.argv[0] + ' ' + "ATTACKING_TROOPS " + "DEFENDING TROOPS "; quit()
-    #these statements control how many dice can be thrown according to how many troops are available and can advance to the territory captured
-    asoldiers = int(sys.argv[1]); dsoldiers = int(sys.argv[2])
-    if (asoldiers >= 4):
-        atd=3
-    if (asoldiers == 3):
-        atd=2
-    if (asoldiers == 2):
-        atd=1
-    if (dsoldiers >=2):
-        dtd=2
-    if (dsoldiers == 1):
-        dtd=1
-        
-    while True:
-        #if attacking troops available is 1 then break because there are no reserves left to advance
-        #going full kamikaze isnt in the rules :)
-        if asoldiers == 3:
-            atd=2
-        if asoldiers == 2:
-            atd=1
-        if dsoldiers == 1:
-            dtd=1
-        if (asoldiers <= 1) or (dsoldiers <= 0):
-            break
-        roll(atd,dtd)
-    lcd.clear(); lcd.set_contrast(50); backlight.set_graph(0.0)
-    lcd.set_cursor_position(0,0); lcd.write("War is hell...")
-    lcd.set_cursor_position(0,1); lcd.write("Offense Lost: " + str(atotallost))
-    lcd.set_cursor_position(0,2); lcd.write("Defense Lost: " + str(dtotallost))
-    print '\n' + "Attacking troops lost: " + str(atotallost) + '\n' + "Defending troops lost: " + str(dtotallost) + '\n'
-    sys.exit()
+	if len(sys.argv) != 3:
+		print "Check arguments..." + '\n' + sys.argv[0] + ' ' + "ATTACKING_DICE " + "DEFENDING DICE"; quit()
+	if (int(sys.argv[1]) < 1) or (int(sys.argv[1]) > 3):
+		print "Check attacking dice..."; quit()
+	elif (int(sys.argv[2]) < 1) or (int(sys.argv[2]) > 2):
+		print "Check defending dice..."; quit()
+	else:
+		atd = int(sys.argv[1])
+		dtd = int(sys.argv[2])
+	while True:
+            #these statements control how many dice can be thrown according to how many troops are available and can advance to the territory captured
+            if asoldiers == 3:
+                atd=2
+            if asoldiers == 2:
+                atd=1
+            if dsoldiers == 1:
+                dtd=1
+            #if attacking troops available is 1 then break because there are no reserves left to advance
+            #going full kamikaze isnt in the rules :)
+            if (asoldiers <= 1) or (dsoldiers <= 0):
+                break
+            roll(atd,dtd)
+	print '\n' + "Attacking troops lost: " + str(atotallost) + '\n' + "Defending troops lost: " + str(dtotallost) + '\n'
+	sys.exit()
 
 def roll(A,D):
     #set the list for numbers thrown and variables to "collect the dead"
