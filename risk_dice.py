@@ -81,5 +81,5 @@ def roll(A,D):
     print "Attacker lost: " + str(atroops) + " troops" + '\n' + "Defender lost: " + str(dtroops) + " troops" + '\n'
     asoldiers-=atroops; dsoldiers-=dtroops
     atotallost+=atroops; dtotallost+=dtroops
-
-war()
+if __name__ == "__main__":
+    war()
