@@ -22,19 +22,28 @@ asoldiers=0; dsoldiers=0
 atotallost=0; dtotallost=0
 atotaldice=0; dtotaldice=0
 
+def clear_all():
+    #clear all variables after each roll
+    global atotaldice, dtotaldice, asoldiers, dsoldiers, atotallost, dtotallost
+    asoldiers=0; dsoldiers=0
+    atotallost=0; dtotallost=0
+    atotaldice=0; dtotaldice=0
+
 def single(atd,dtd):
     #sanity checks to make sure theres no funny business
     if (atd < 1) or (atd > 3):
-        print "Check attacking dice..."; quit()
+        print "Check attacking dice..."#; quit()
     elif (dtd < 1) or (dtd > 2):
-        print "Check defending dice..."; quit()
+        print "Check defending dice..."#; quit()
     else:
         roll(atd,dtd)
-        stats()
-        tophat()
-        sys.exit()
-def auto():
-    
+    #stats()
+    tophat()
+    clear_all()
+    #sys.exit()
+def auto(autoa, autod):
+    global asoldiers, dsoldiers
+    asoldiers=autoa; dsoldiers=autod
     while True:
         if (asoldiers >= 4): atd=3
         if (asoldiers == 3): atd=2
@@ -46,8 +55,9 @@ def auto():
         roll(atd,dtd)
     tophat()
     print ('\n' + "Attacker total loss: " + str(atotallost) + '\n' + "Defender total loss: " + str(dtotallost) + '\n')
-    stats()
-    sys.exit()
+    #stats()
+    clear_all()
+    #sys.exit()
 
 def stats():
     a = prettytable.PrettyTable(["Attacker Lost", "Attacking Dice", "% Lost"])
@@ -108,11 +118,11 @@ def mode():
         quit()
     if sys.argv[1] == 'auto' and int(sys.argv[2]) <= 1:
         print ("Attacking troop number must be greater than one...")
-        quit()
+        #quit()
     if sys.argv[1] == 'auto':
-        asoldiers=int(sys.argv[2])
-        dsoldiers=int(sys.argv[3])
-        auto()
+        autoa=int(sys.argv[2])
+        autod=int(sys.argv[3])
+        auto(autoa,autod)
     if sys.argv[1] == 'single':
         atd=int(sys.argv[2])
         dtd=int(sys.argv[3])
