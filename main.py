@@ -60,7 +60,7 @@ class RiskApp(QtGui.QMainWindow, gui.Ui_MainWindow):
         sys.stdout = sys.__stdout__
         
     def console_output(self, text):
-	#redirect stdout to a readonly lineedit widget
+    #redirect stdout to a readonly lineedit widget
         cursor = self.console_window.textCursor()
         cursor.movePosition(QtGui.QTextCursor.End)
         cursor.insertText(text)
@@ -69,12 +69,14 @@ class RiskApp(QtGui.QMainWindow, gui.Ui_MainWindow):
 
         
     def numpad(self):
-	#sets both spinboxes to equal value until focusInEvent can be solved
-        self.acount_spinbox.setValue(int(self.sender().text()))
-        self.dcount_spinbox.setValue(int(self.sender().text()))
-        
+    #sets both spinboxes to equal value until focusInEvent can be solved
+        if self.attacker_radio.isChecked() == True:
+            self.acount_spinbox.setValue(int(self.sender().text()))
+        if self.defender_radio.isChecked() == True:
+            self.dcount_spinbox.setValue(int(self.sender().text()))
+                    
     def clear_gui(self):
-	#clear spinbox values
+    #clear spinbox values
         self.acount_spinbox.setValue(0)
         self.dcount_spinbox.setValue(0)
         
