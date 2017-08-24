@@ -5,17 +5,7 @@ from dothat import lcd
 from dothat import backlight
 import prettytable
 
-
-'''from bottle import Bottle, run
-
-app = Bottle()
-
-@app.route('/')
-def msg(x):
-    return x
-
-run(app, host='localhost', port=8080)'''
-#to do:  add touch menu options.  start an http server and print all console output to http PUTs
+#to do:  add pi HAT touch menu options.  start an http server and print all console output to http PUTs
 
 #main place holders
 asoldiers=0; dsoldiers=0
@@ -42,8 +32,10 @@ def single(atd,dtd):
     clear_all()
     #sys.exit()
 def auto(autoa, autod):
+    #global variables store total number of attackers and defenders
     global asoldiers, dsoldiers
     asoldiers=autoa; dsoldiers=autod
+    #since this is an auto attack.  roll until someone loses
     while True:
         if (asoldiers >= 4): atd=3
         if (asoldiers == 3): atd=2
@@ -53,6 +45,7 @@ def auto(autoa, autod):
         if (asoldiers <= 1) or (dsoldiers <= 0):
             break
         roll(atd,dtd)
+    #print results to Pi HAT
     tophat()
     print ('\n' + "Attacker total loss: " + str(atotallost) + '\n' + "Defender total loss: " + str(dtotallost) + '\n')
     #stats()
@@ -60,6 +53,7 @@ def auto(autoa, autod):
     #sys.exit()
 
 def stats():
+    #print out statistics of each roll.  probably wont be use long term as its not needed.
     a = prettytable.PrettyTable(["Attacker Lost", "Attacking Dice", "% Lost"])
     a.add_row([atotallost, atotaldice, (float(atotallost) / float(atotaldice)*100)])
     d = prettytable.PrettyTable(["Defender Lost", "Defending Dice", "% Lost"])
@@ -67,6 +61,7 @@ def stats():
     print (a); print (d)
 
 def tophat():
+    #controls the raspberry pi HAT display
     lcd.clear(); lcd.set_contrast(50); backlight.set_graph(0)
     if (asoldiers > dsoldiers) and (atotallost != 1):
         backlight.rgb(0,255,0)
