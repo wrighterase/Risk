@@ -1,9 +1,11 @@
 #!/usr/bin/python
+from __future__ import print_function
 import sys
 from random import randint
 from dothat import lcd
 from dothat import backlight
 import prettytable
+
 
 #to do:  add pi HAT touch menu options.  start an http server and print all console output to http PUTs
 
@@ -22,9 +24,11 @@ def clear_all():
 def single(atd,dtd):
     #sanity checks to make sure theres no funny business
     if (atd < 1) or (atd > 3):
-        print "Check attacking dice..."#; quit()
+        print("Check attacking dice...")
+	#quit()
     elif (dtd < 1) or (dtd > 2):
-        print "Check defending dice..."#; quit()
+        print("Check defending dice...")
+	#quit()
     else:
         roll(atd,dtd)
     #stats()
@@ -47,7 +51,7 @@ def auto(autoa, autod):
         roll(atd,dtd)
     #print results to Pi HAT
     tophat()
-    print ('\n' + "Attacker total loss: " + str(atotallost) + '\n' + "Defender total loss: " + str(dtotallost) + '\n')
+    print("\nAttacker total loss: " + str(atotallost) + "\nDefender total loss: " + str(dtotallost) + '\n')
     #stats()
     clear_all()
     #sys.exit()
@@ -86,8 +90,8 @@ def roll(A,D):
     #reverse sort the lists of numbers thrown so a high die to high die comparison can be made
     attacker_dice.sort(reverse=True), defender_dice.sort(reverse=True)
 
-    print ("Attacking troops: " + str(asoldiers) + ' ' + "Defending troops: " + ' ' + str(dsoldiers))
-    print ("Attacker dice: " + str(attacker_dice) + '\n' + "Defender dice: " + str(defender_dice))
+    print("Attacking troops: " + str(asoldiers) + ' ' + "Defending troops: " + ' ' + str(dsoldiers))
+    print("Attacker dice: " + str(attacker_dice) + '\n' + "Defender dice: " + str(defender_dice))
     
     #for each attacker die thrown, compare the attacker & defender and deduct a troop from the losing side with a tie going to the defender.
     #if the index is 2 (the 3rd die) break since a defender can only throw two dice.
@@ -100,16 +104,16 @@ def roll(A,D):
             dtroops+=1
         if len(defender_dice) == 1:
             break
-    print ("Attacker lost: " + str(atroops) + " troops" + '\n' + "Defender lost: " + str(dtroops) + " troops" + '\n')
+    print("Attacker lost: " + str(atroops) + " troops\n" + "Defender lost: " + str(dtroops) + " troops\n")
     asoldiers-=atroops; dsoldiers-=dtroops
     atotallost+=atroops; dtotallost+=dtroops
 
 def mode():
     global asoldiers, dsoldiers
     if len(sys.argv) != 4:
-        print "Check attack mode..." + '\n' + sys.argv[0] + " MODE" + " ATTACKING_OPTION" + " DEFENDING_OPTION" + '\n'
-        print "e.g. " + sys.argv[0] + " auto" + " ATTACKING_TROOPS" + " DEFENDING_TROOPS"
-        print "e.g. " + sys.argv[0] + " single" + " ATTACKING_DICE" + " DEFENDING_DICE"
+        print("Check attack mode...\n" + sys.argv[0] + " MODE" + " ATTACKING_OPTION" + " DEFENDING_OPTION\n")
+        print("e.g. " + sys.argv[0] + " auto" + " ATTACKING_TROOPS" + " DEFENDING_TROOPS")
+        print("e.g. " + sys.argv[0] + " single" + " ATTACKING_DICE" + " DEFENDING_DICE")
         quit()
     if sys.argv[1] == 'auto' and int(sys.argv[2]) <= 1:
         print ("Attacking troop number must be greater than one...")
